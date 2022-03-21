@@ -24,6 +24,16 @@ export default class KanbanAPI {
 		column.items.push(item);
 		save(data);
 
+		fetch("/api/items",
+			{
+				method: "POST",
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(item)
+			});
+
 		return item;
 	}
 
