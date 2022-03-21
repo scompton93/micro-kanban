@@ -2,5 +2,6 @@
 (
     [Id] INT IDENTITY(1,1) PRIMARY KEY,
     [Content] NVARCHAR(512) NOT NULL,
+    [Order] SMALLINT NOT NULL DEFAULT 1, 
     [Created_UTC] DATETIME2 NOT NULL
 )
