@@ -1,9 +1,12 @@
 ﻿using micro_kanban.Data;
+using micro_kanban.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+
 
 namespace micro_kanban.Pages.API
 {
@@ -15,14 +18,14 @@ namespace micro_kanban.Pages.API
         public List<Models.KanBanColumnModel> Get()
         {
             SqlDataAccess sql = new SqlDataAccess();
-            var kanbanItems = sql.LoadData<Models.KanbanModel, dynamic>("dbo.spGetItems", "ConnString");
+            var kanbanItems = sql.LoadData<KanbanModel, dynamic>("dbo.spGetItems", "ConnString");
 
-            var kanbanResult = new List<Models.KanBanColumnModel>();
+            var kanbanResult = new List<KanBanColumnModel>();
 
             var columnList = kanbanItems.Select(o => o.Column).Distinct();
             foreach(var col in columnList)
             {
-                kanbanResult.Add(new Models.KanBanColumnModel(col, kanbanItems.Where(o => o.Column == col).ToList() ));
+                kanbanResult.Add(new KanBanColumnModel(col, kanbanItems.Where(o => o.Column == col).ToList() ));
             }
             return kanbanResult;
         }
@@ -34,9 +37,11 @@ namespace micro_kanban.Pages.API
         }
 
         [HttpPost]
-        public void Post([FromBody] object value)
+        public void Post([FromBody] KanbanModel value)
         {
-
+            SqlDataAccess sql = new SqlDataAccess();
+            var p = new { ColumnId = value.Id, Content = value.Content };
+            sql.SaveData("dbo.spInsertItem", p,"ConnString");
             Console.WriteLine("test");
         }
     }
