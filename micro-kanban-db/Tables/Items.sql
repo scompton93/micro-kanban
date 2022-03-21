@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Items]
 (
-    [Id] INT NOT NULL PRIMARY KEY,
+    [Id] INT IDENTITY(1,1) PRIMARY KEY,
     [Content] NVARCHAR(512) NOT NULL,
     [Created_UTC] DATETIME2 NOT NULL
 )
