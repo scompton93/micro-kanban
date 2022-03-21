@@ -15,18 +15,16 @@ namespace micro_kanban.Pages.API
     public class KanbanController : ControllerBase
     {
         [HttpGet]
-        public List<Models.KanBanColumnModel> Get()
+        public object Get()
         {
             SqlDataAccess sql = new SqlDataAccess();
             var kanbanItems = sql.LoadData<KanbanModel, dynamic>("dbo.spGetItems", "ConnString");
 
-            var kanbanResult = new List<KanBanColumnModel>();
-
-            var columnList = kanbanItems.Select(o => o.Column).Distinct();
-            foreach(var col in columnList)
-            {
-                kanbanResult.Add(new KanBanColumnModel(col, kanbanItems.Where(o => o.Column == col).ToList() ));
-            }
+            var kanbanResult = kanbanItems
+                .Select(m => new { Id = m.Id, Column = m.Column, Content = m.Content })
+                .GroupBy(m => m.Column)
+                .Select(m => new { Id = m.Key, Items = m.ToList() })
+                .ToList();
             return kanbanResult;
         }
 
@@ -36,12 +34,13 @@ namespace micro_kanban.Pages.API
             return null;
         }
 
+
         [HttpPost]
         public void Post([FromBody] KanbanModel value)
         {
             SqlDataAccess sql = new SqlDataAccess();
             var p = new { ColumnId = value.Id, Content = value.Content };
-            sql.SaveData("dbo.spInsertItem", p,"ConnString");
+            sql.SaveData("dbo.spInsertItem", p, "ConnString");
             Console.WriteLine("test");
         }
     }
