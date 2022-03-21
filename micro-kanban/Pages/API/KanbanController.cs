@@ -12,10 +12,19 @@ namespace micro_kanban.Pages.API
     public class KanbanController : ControllerBase
     {
         [HttpGet]
-        public List<Models.KanbanModel> Get()
+        public List<Models.KanBanColumnModel> Get()
         {
             SqlDataAccess sql = new SqlDataAccess();
-            return sql.LoadData<Models.KanbanModel, dynamic>("dbo.spGetItems", "ConnString");
+            var kanbanItems = sql.LoadData<Models.KanbanModel, dynamic>("dbo.spGetItems", "ConnString");
+
+            var kanbanResult = new List<Models.KanBanColumnModel>();
+
+            var columnList = kanbanItems.Select(o => o.Column).Distinct();
+            foreach(var col in columnList)
+            {
+                kanbanResult.Add(new Models.KanBanColumnModel(col, kanbanItems.Where(o => o.Column == col).ToList() ));
+            }
+            return kanbanResult;
         }
 
         [HttpGet("{id}")]

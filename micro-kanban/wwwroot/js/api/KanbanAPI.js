@@ -1,7 +1,6 @@
 export default class KanbanAPI {
 	static getItems(columnId) {
 		const column = read().find(column => column.id == columnId);
-
 		if (!column) {
 			return [];
 		}
@@ -24,7 +23,7 @@ export default class KanbanAPI {
 		column.items.push(item);
 		save(data);
 
-		fetch("/api/items",
+		fetch("/api/kanban",
 			{
 				method: "POST",
 				headers: {
@@ -92,26 +91,13 @@ export default class KanbanAPI {
 }
 
 function read() {
-	const json = localStorage.getItem("kanban-data");
+	var request = new XMLHttpRequest();
+	request.open('GET', '/api/kanban', false);
+	request.send(null);
 
-	if (!json) {
-		return [
-			{
-				id: 1,
-				items: []
-			},
-			{
-				id: 2,
-				items: []
-			},
-			{
-				id: 3,
-				items: []
-			},
-		];
+	if (request.status === 200) {
+		return JSON.parse(request.responseText);
 	}
-
-	return JSON.parse(json);
 }
 
 function save(data) {
