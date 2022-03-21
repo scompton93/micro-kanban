@@ -4,6 +4,8 @@
 	width: 750px;
 	background: #009578;
 	border-radius: 5px;
+	margin: auto;
+	margin-top:45px;
 }
 
 .kanban * {
