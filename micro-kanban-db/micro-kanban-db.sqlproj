@@ -62,5 +62,6 @@
   <ItemGroup>
     <Build Include="Tables\Items.sql" />
     <Build Include="Stored Procedures\spGetItems.sql" />
+    <Build Include="Stored Procedures\spInsertItem.sql" />
   </ItemGroup>
 </Project>

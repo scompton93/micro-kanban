@@ -33,7 +33,7 @@ namespace micro_kanban.Data
         {
             string connectionString = GetConnectionString(connectionStringName);
 
-            using (IDbConnection connection = new SqlConnection())
+            using (IDbConnection connection = new SqlConnection(connectionString))
             {
                 connection.Execute(storedProceure, parameters,
                     commandType: CommandType.StoredProcedure);

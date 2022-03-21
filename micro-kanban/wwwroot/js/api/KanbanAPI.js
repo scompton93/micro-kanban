@@ -30,7 +30,7 @@ export default class KanbanAPI {
 					'Accept': 'application/json',
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(item)
+				body: JSON.stringify({ columnId, content })
 			});
 
 		return item;
