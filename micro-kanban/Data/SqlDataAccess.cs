@@ -16,13 +16,13 @@ namespace micro_kanban.Data
             return File.ReadAllText("connstring.txt");
         }
 
-        public List<T> LoadData<T, U>(string storedProceure, U parameters, string connectionStringName)
+        public List<T> LoadData<T, U>(string storedProceure, string connectionStringName)
         {
             string connectionString = GetConnectionString(connectionStringName);
 
             using (IDbConnection connection = new SqlConnection(connectionString))
             {
-                List<T> rows = connection.Query<T>(storedProceure, parameters,
+                List<T> rows = connection.Query<T>(storedProceure, 
                     commandType: CommandType.StoredProcedure).ToList();
 
                 return rows;

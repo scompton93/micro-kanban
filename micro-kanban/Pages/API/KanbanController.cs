@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using micro_kanban.Data;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +9,13 @@ namespace micro_kanban.Pages.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ItemsController : ControllerBase
+    public class KanbanController : ControllerBase
     {
         [HttpGet]
-        public IEnumerable<string> Get()
+        public List<Models.KanbanModel> Get()
         {
-            return new string[] { "value1", "value2" };
+            SqlDataAccess sql = new SqlDataAccess();
+            return sql.LoadData<Models.KanbanModel, dynamic>("dbo.spGetItems", "ConnString");
         }
 
         [HttpGet("{id}")]
